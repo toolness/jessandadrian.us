@@ -41,4 +41,4 @@ variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`. Also,
 
 <!-- Links -->
 
-  [twelve-factor]: http://12factor.net/config
+  [twelve-factor]: http://12factor.net/
