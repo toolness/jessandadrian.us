@@ -11,6 +11,14 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "boop.settings")
 
 from django.core.wsgi import get_wsgi_application
+
+import subprocess
+import sys
+
+subprocess.Popen([
+	sys.executable, 'manage.py', 'collectstatic', '--noinput'
+]).wait()
+
 from dj_static import Cling
 
 application = Cling(get_wsgi_application())
