@@ -1,6 +1,5 @@
 import subprocess
 import sys
-from dj_static import Cling
 
 from .wsgi import application
 
@@ -12,5 +11,7 @@ from .wsgi import application
 subprocess.Popen([
   sys.executable, 'manage.py', 'collectstatic', '--noinput'
 ]).wait()
+
+from dj_static import Cling
 
 application = Cling(application)
