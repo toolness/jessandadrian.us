@@ -14,21 +14,27 @@ import sys
 import urlparse
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-if sys.argv[:2] == ['manage.py', 'runserver']:
+def set_default_env(**kwargs):
+    for key in kwargs:
+        if not key in os.environ:
+            os.environ[key] = kwargs[key]
+
+if sys.argv[:1] == ['manage.py']:
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-    os.environ['SECRET_KEY'] = 'development mode, yo'
-    os.environ['DEBUG'] = ''
-    # TODO: Support any alternative port passed-in from the command-line.
-    os.environ['PORT'] = '8000'
-    # TODO: Set ORIGIN to include any passed-in IP address.
+    set_default_env(
+        SECRET_KEY='development mode',
+        DEBUG='indeed',
+        # TODO: Support any alternative port passed-in from the command-line.
+        PORT='8000',
+        # TODO: Set ORIGIN to include any passed-in IP address.
+    )
 
 SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = TEMPLATE_DEBUG = 'DEBUG' in os.environ
 PORT = int(os.environ['PORT'])
 
-if DEBUG and not 'ORIGIN' in os.environ:
-    os.environ['ORIGIN'] = 'http://localhost:%d' % PORT
+if DEBUG: set_default_env(ORIGIN='http://localhost:%d' % PORT)
 
 ORIGIN = os.environ['ORIGIN']
 
