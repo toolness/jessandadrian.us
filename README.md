@@ -17,6 +17,9 @@ python manage.py runserver
 
 ## Environment Variables
 
+Unlike traditional Django settings, we use environment variables
+for configuration to be compliant with [twelve-factor][] apps.
+
 **Note:** When an environment variable is described as representing a
 boolean value, if the variable exists with *any* value (even the empty
 string), the boolean is true; otherwise, it's false.
@@ -35,3 +38,7 @@ variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`. Also,
 * `AUTO_COLLECTSTATIC` is a boolean that determines whether to
   automatically run `manage.py collectstatic` when the WSGI app is
   instantiated. Useful for certain production deployments, such as Heroku.
+
+<!-- Links -->
+
+  [twelve-factor]: http://12factor.net/config
