@@ -10,22 +10,27 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 import urlparse
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+if sys.argv[:2] == ['manage.py', 'runserver']:
+    # Quick-start development settings - unsuitable for production
+    # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+    os.environ['SECRET_KEY'] = 'development mode, yo'
+    os.environ['DEBUG'] = ''
+    # TODO: Support any alternative port passed-in from the command-line.
+    os.environ['PORT'] = '8000'
+    # TODO: Set ORIGIN to include any passed-in IP address.
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = 'DEBUG' in os.environ
+PORT = int(os.environ['PORT'])
 
-PORT = int(os.environ.get('PORT', '8000'))
+if DEBUG and not 'ORIGIN' in os.environ:
+    os.environ['ORIGIN'] = 'http://localhost:%d' % PORT
 
-ORIGIN = os.environ.get('ORIGIN', 'http://localhost:%d' % PORT)
+ORIGIN = os.environ['ORIGIN']
 
 ALLOWED_HOSTS = [urlparse.urlparse(ORIGIN).hostname]
 
