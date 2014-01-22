@@ -1,1 +1,1 @@
-web: gunicorn boop.gunicorn_wsgi
+web: gunicorn boop.wsgi

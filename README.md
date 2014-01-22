@@ -21,8 +21,9 @@ python manage.py runserver
 boolean value, if the variable exists with *any* value (even the empty
 string), the boolean is true; otherwise, it's false.
 
-**Note:** When running `manage.py runserver`, the following environment
-variables are given default values: `SECRET_KEY`, `DEBUG`, `PORT`, `ORIGIN`.
+**Note:** When running `manage.py`, the following environment
+variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`. Also,
+`DEBUG` is enabled.
 
 * `SECRET_KEY` is a large random value.
 * `DEBUG` is a boolean value that indicates whether debugging is enabled
@@ -31,3 +32,6 @@ variables are given default values: `SECRET_KEY`, `DEBUG`, `PORT`, `ORIGIN`.
 * `ORIGIN` is the origin of the server, as it appears
   to users. If `DEBUG` is enabled, this defaults to
   `http://localhost:PORT`. Otherwise, it must be defined.
+* `AUTO_COLLECTSTATIC` is a boolean that determines whether to
+  automatically run `manage.py collectstatic` when the WSGI app is
+  instantiated. Useful for certain production deployments, such as Heroku.
