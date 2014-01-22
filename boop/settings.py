@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import sys
 import urlparse
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+import dj_database_url
+
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 def set_default_env(**kwargs):
     for key in kwargs:
@@ -35,6 +37,10 @@ DEBUG = TEMPLATE_DEBUG = 'DEBUG' in os.environ
 PORT = int(os.environ['PORT'])
 
 if DEBUG: set_default_env(ORIGIN='http://localhost:%d' % PORT)
+
+set_default_env(
+    DATABASE_URL='sqlite:///%s' % os.path.join(BASE_DIR, 'db.sqlite3')
+)
 
 ORIGIN = os.environ['ORIGIN']
 
@@ -69,10 +75,7 @@ WSGI_APPLICATION = 'boop.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config()
 }
 
 # Internationalization

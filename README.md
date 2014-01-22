@@ -38,6 +38,8 @@ variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`. Also,
 * `AUTO_COLLECTSTATIC` is a boolean that determines whether to
   automatically run `manage.py collectstatic` when the WSGI app is
   instantiated. Useful for certain production deployments, such as Heroku.
+* `DATABASE_URL` is the URL for the database. Defaults to a `sqlite://`
+  URL pointing to `db.sqlite3` at the root of the repository.
 
 <!-- Links -->
 
