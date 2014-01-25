@@ -11,6 +11,10 @@ class RSVPForm(forms.ModelForm):
     class Meta:
         model = RSVP
         fields = ['is_attending', 'number_of_guests']
+        labels = {
+            'is_attending': 'Are you attending the wedding?',
+            'number_of_guests': 'Number of guests (including yourself)'
+        }
 
 def home(request):
     context = {}
