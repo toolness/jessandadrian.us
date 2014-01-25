@@ -9,4 +9,4 @@ class RSVP(models.Model):
     number_of_guests = models.SmallIntegerField()
 
     def __unicode__(self):
-    	return u'RSVP for %s' % self.user
+        return u'RSVP for %s' % self.user

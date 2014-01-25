@@ -6,12 +6,12 @@ import models
 # Register your models here.
 
 class RSVPInline(admin.StackedInline):
-	verbose_name_plural = 'RSVP'
-	model = models.RSVP
-	can_delete = False
+    verbose_name_plural = 'RSVP'
+    model = models.RSVP
+    can_delete = False
 
 class RSVPUserAdmin(UserAdmin):
-	inlines = (RSVPInline,)
+    inlines = (RSVPInline,)
 
 admin.site.unregister(User)
 admin.site.register(User, RSVPUserAdmin)
