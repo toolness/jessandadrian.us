@@ -6,6 +6,7 @@ import models
 # Register your models here.
 
 class RSVPInline(admin.StackedInline):
+	verbose_name_plural = 'RSVP'
 	model = models.RSVP
 	can_delete = False
 

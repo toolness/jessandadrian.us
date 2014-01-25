@@ -7,3 +7,6 @@ class RSVP(models.Model):
     passphrase = models.CharField(max_length=30, unique=True)
     is_attending = models.BooleanField()
     number_of_guests = models.SmallIntegerField()
+
+    def __unicode__(self):
+    	return u'RSVP for %s' % self.user
