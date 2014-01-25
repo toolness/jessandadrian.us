@@ -10,10 +10,11 @@ from .models import RSVP
 class RSVPForm(forms.ModelForm):
     class Meta:
         model = RSVP
-        fields = ['is_attending', 'number_of_guests']
+        fields = ['is_attending', 'number_of_guests', 'song']
         labels = {
             'is_attending': 'Are you attending the wedding?',
-            'number_of_guests': 'Number of guests (including yourself)'
+            'number_of_guests': 'Number of guests (including yourself)',
+            'song': 'What is a song you would like to dance to?'
         }
 
 def home(request):
