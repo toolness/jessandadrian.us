@@ -22,6 +22,7 @@ def home(request):
                 messages.success(request, 'RSVP updated! Thanks, buddy.')
                 rsvp_form.save()
                 return redirect('home')
+            messages.error(request, 'Your RSVP has some problems.')
         else:
             rsvp_form = RSVPForm(instance=rsvp)
         context['rsvp_form'] = rsvp_form
