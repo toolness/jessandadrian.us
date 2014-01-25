@@ -1,0 +1,22 @@
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if user.is_authenticated %}
+<p>hi {{ user }}</p>
+
+<form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <input type="submit" value="logout">
+</form>
+{% else %}
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  passphrase: <input type="text" name="passphrase">
+  <input type="submit" value="login">
+</form>
+{% endif %}
