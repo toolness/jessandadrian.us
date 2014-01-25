@@ -10,6 +10,7 @@ class RSVPTests(TestCase):
         user = User(username='john')
         user.save()
         rsvp = RSVP(user=user)
+        rsvp.passphrase = 'a unique passphrase'
         rsvp.save()
         self.user = user
 
@@ -32,3 +33,15 @@ class RSVPTests(TestCase):
             "Declined .* can't have guests",
             rsvp.full_clean
         )
+
+    def test_accepted_invites_work(self):
+        rsvp = self.user.rsvp
+        rsvp.is_attending = True
+        rsvp.number_of_guests = 1
+        rsvp.full_clean()
+
+    def test_declined_invites_work(self):
+        rsvp = self.user.rsvp
+        rsvp.is_attending = False
+        rsvp.number_of_guests = 0
+        rsvp.full_clean()
