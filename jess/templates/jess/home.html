@@ -9,6 +9,12 @@
 {% if user.is_authenticated %}
 <p>hi {{ user }}</p>
 
+<form method="post" autocomplete="off">
+  {% csrf_token %}
+  {{ rsvp_form.as_p }}
+  <input type="submit" value="RSVP">
+</form>
+
 <form method="post" action="{% url 'logout' %}">
   {% csrf_token %}
   <input type="submit" value="logout">

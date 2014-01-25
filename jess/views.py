@@ -1,3 +1,4 @@
+from django import forms
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib import auth
@@ -6,8 +7,25 @@ from .models import RSVP
 
 # Create your views here.
 
+class RSVPForm(forms.ModelForm):
+    class Meta:
+        model = RSVP
+        fields = ['is_attending', 'number_of_guests']
+
 def home(request):
-    return render(request, 'jess/home.html')
+    context = {}
+    if request.user.is_authenticated():
+        rsvp = request.user.rsvp
+        if request.method == 'POST':
+            rsvp_form = RSVPForm(request.POST, instance=rsvp)
+            if rsvp_form.is_valid():
+                messages.success(request, 'RSVP updated! Thanks, buddy.')
+                rsvp_form.save()
+                return redirect('home')
+        else:
+            rsvp_form = RSVPForm(instance=rsvp)
+        context['rsvp_form'] = rsvp_form
+    return render(request, 'jess/home.html', context)
 
 def login(request):
     if request.method == 'POST':
