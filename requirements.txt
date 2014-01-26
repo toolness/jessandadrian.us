@@ -1,11 +1,4 @@
-Django==1.6.1
-dj-static==0.0.5
-gunicorn==18.0
-pystache==0.5.3
-static==1.0.2
-wsgiref==0.1.2
-dj-database-url==0.2.2
-South==0.8.4
+-r requirements.minimal.txt
 
 # Only required if using Postgres as a backend.
 psycopg2==2.5.2

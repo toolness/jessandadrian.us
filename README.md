@@ -11,7 +11,7 @@ virtualenv venv
 # On Windows, replace the following line with 'venv\Scripts\activate'.
 source venv/bin/activate
 
-pip install -r requirements.txt
+pip install -r requirements.minimal.txt
 python manage.py runserver
 ```
 
