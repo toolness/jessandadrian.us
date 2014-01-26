@@ -12,8 +12,18 @@ virtualenv venv
 source venv/bin/activate
 
 pip install -r requirements.minimal.txt
+python manage.py syncdb
+```
+
+You will be asked if you want to create an admin user. Do this, then run:
+
+```
+python manage.py migrate
 python manage.py runserver
 ```
+
+At this point, you can visit http://localhost:8000/admin and log in as your
+new admin user.
 
 ## Environment Variables
 
