@@ -1,5 +1,5 @@
 """
-Django settings for boop project.
+Django settings for website project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -68,9 +68,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'boop.urls'
+ROOT_URLCONF = 'website.urls'
 
-WSGI_APPLICATION = 'boop.wsgi.application'
+WSGI_APPLICATION = 'website.wsgi.application'
 
 
 # Database

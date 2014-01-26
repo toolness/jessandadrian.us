@@ -1,5 +1,5 @@
 """
-WSGI config for boop project.
+WSGI config for website project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
 import os
 import sys
 import subprocess
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "boop.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "website.settings")
 
 if 'AUTO_COLLECTSTATIC' in os.environ:
     subprocess.Popen([
