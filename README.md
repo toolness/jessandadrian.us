@@ -35,8 +35,8 @@ boolean value, if the variable exists with *any* value (even the empty
 string), the boolean is true; otherwise, it's false.
 
 **Note:** When running `manage.py`, the following environment
-variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`. Also,
-`DEBUG` is enabled.
+variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`,
+`EMAIL_BACKEND_URL`. Also, `DEBUG` is enabled.
 
 * `SECRET_KEY` is a large random value.
 * `DEBUG` is a boolean value that indicates whether debugging is enabled
@@ -46,7 +46,16 @@ variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`. Also,
   to users. If `DEBUG` is enabled, this defaults to
   `http://localhost:PORT`. Otherwise, it must be defined.
 * `DATABASE_URL` is the URL for the database. Defaults to a `sqlite://`
-  URL pointing to `db.sqlite3` at the root of the repository.
+  URL pointing to `db.sqlite3` at the root of the repository. If this
+  value is the name of another (all-caps) environment variable, e.g.
+  `HEROKU_POSTGRESQL_AMBER_URL`, that variable's value will be used
+  as the database URL.
+* `EMAIL_BACKEND_URL` is a URL representing the email backend to use.
+  Examples include `console:`, `smtp://hostname:port`, and
+  `smtp+tls://user:pass@hostname:port`.
+* `SECURE_PROXY_SSL_HEADER` is an optional HTTP request header field name
+  and value indicating that the request is actually secure. For example,
+  Heroku deployments should set this to `X-Forwarded-Proto: https`.
 
 <!-- Links -->
 

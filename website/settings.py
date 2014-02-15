@@ -14,12 +14,12 @@ import sys
 import urlparse
 import dj_database_url
 
-BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+from .settings_utils import set_default_env, set_default_db, \
+                            parse_email_backend_url, \
+                            parse_secure_proxy_ssl_header
 
-def set_default_env(**kwargs):
-    for key in kwargs:
-        if not key in os.environ:
-            os.environ[key] = kwargs[key]
+BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+path = lambda *parts: os.path.join(BASE_DIR, *parts)
 
 if os.path.basename(sys.argv[0]) == 'manage.py':
     # Quick-start development settings - unsuitable for production
@@ -30,6 +30,12 @@ if os.path.basename(sys.argv[0]) == 'manage.py':
         # TODO: Support any alternative port passed-in from the command-line.
         PORT='8000',
         # TODO: Set ORIGIN to include any passed-in IP address.
+        EMAIL_BACKEND_URL='console:',
+    )
+
+if 'SECURE_PROXY_SSL_HEADER' in os.environ:
+    SECURE_PROXY_SSL_HEADER = parse_secure_proxy_ssl_header(
+        os.environ['SECURE_PROXY_SSL_HEADER']
     )
 
 SECRET_KEY = os.environ['SECRET_KEY']
@@ -38,9 +44,9 @@ PORT = int(os.environ['PORT'])
 
 if DEBUG: set_default_env(ORIGIN='http://localhost:%d' % PORT)
 
-set_default_env(
-    DATABASE_URL='sqlite:///%s' % os.path.join(BASE_DIR, 'db.sqlite3')
-)
+set_default_db('sqlite:///%s' % path('db.sqlite3'))
+
+globals().update(parse_email_backend_url(os.environ['EMAIL_BACKEND_URL']))
 
 ORIGIN = os.environ['ORIGIN']
 
