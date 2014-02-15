@@ -44,6 +44,9 @@ PORT = int(os.environ['PORT'])
 
 if DEBUG: set_default_env(ORIGIN='http://localhost:%d' % PORT)
 
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL',
+                                    'webmaster@localhost')
+
 set_default_db('sqlite:///%s' % path('db.sqlite3'))
 
 globals().update(parse_email_backend_url(os.environ['EMAIL_BACKEND_URL']))

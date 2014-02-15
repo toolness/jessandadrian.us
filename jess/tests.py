@@ -1,8 +1,11 @@
 from django.test import TestCase
+from django.core import mail
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 from .models import RSVP
+from . import email
 
 # Create your tests here.
 class RSVPTests(TestCase):
@@ -45,3 +48,37 @@ class RSVPTests(TestCase):
         rsvp.is_attending = False
         rsvp.number_of_guests = 0
         rsvp.full_clean()
+
+class EmailTests(TestCase):
+    def test_get_all_staff_with_email_works(self):
+        User(username='foo', is_active=True, is_staff=True).save()
+        User(username='bar', is_active=True, is_staff=True,
+             email='bar@example.org').save()
+        User(username='baz', is_active=True).save()
+        users = email.get_all_staff_with_email()
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].email, 'bar@example.org')
+
+    def test_generate_rsvp_notification_works(self):
+        user = User(username='john', first_name='John',
+                    last_name=u'\u2026')
+        rsvp = RSVP(user=user, is_attending=True, number_of_guests=2, 
+                    song=u'Songy Song\u2026')
+        subject, body = email.generate_rsvp_notification(rsvp)
+        self.assertRegexpMatches(subject, u'John \u2026')
+        self.assertRegexpMatches(body, r'2 guest')
+        self.assertRegexpMatches(body, u'Songy Song\u2026')
+
+    def test_notify_all_staff_of_rsvp_works(self):
+        admin = User(username='admin', is_active=True, is_staff=True,
+                     email='admin@example.org')
+        user = User(username='john', first_name=u'John\u2026')
+        rsvp = RSVP(user=user)
+        admin.save()
+        email.notify_all_staff_of_rsvp(rsvp)
+        self.assertEqual(len(mail.outbox), 1)
+        msg = mail.outbox[0]
+        self.assertRegexpMatches(msg.subject, u'John\u2026')
+        self.assertRegexpMatches(msg.body, u'John\u2026')
+        self.assertEqual(msg.to, [u'admin@example.org'])
+        self.assertEqual(msg.from_email, settings.DEFAULT_FROM_EMAIL)

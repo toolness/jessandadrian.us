@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
 from .models import RSVP
+from .email import notify_all_staff_of_rsvp
 
 # Create your views here.
 
@@ -26,6 +27,7 @@ def home(request):
             if rsvp_form.is_valid():
                 messages.success(request, 'RSVP updated! Thanks, buddy.')
                 rsvp_form.save()
+                notify_all_staff_of_rsvp(rsvp)
                 return redirect('home')
             messages.error(request, 'Your RSVP has some problems.')
         else:
