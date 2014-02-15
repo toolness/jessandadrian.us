@@ -45,9 +45,6 @@ variables are given default values: `SECRET_KEY`, `PORT`, `ORIGIN`. Also,
 * `ORIGIN` is the origin of the server, as it appears
   to users. If `DEBUG` is enabled, this defaults to
   `http://localhost:PORT`. Otherwise, it must be defined.
-* `AUTO_COLLECTSTATIC` is a boolean that determines whether to
-  automatically run `manage.py collectstatic` when the WSGI app is
-  instantiated. Useful for certain production deployments, such as Heroku.
 * `DATABASE_URL` is the URL for the database. Defaults to a `sqlite://`
   URL pointing to `db.sqlite3` at the root of the repository.
 

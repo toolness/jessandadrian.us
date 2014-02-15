@@ -21,7 +21,7 @@ def set_default_env(**kwargs):
         if not key in os.environ:
             os.environ[key] = kwargs[key]
 
-if sys.argv[:1] == ['manage.py']:
+if os.path.basename(sys.argv[0]) == 'manage.py':
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
     set_default_env(
