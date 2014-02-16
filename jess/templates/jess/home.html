@@ -1,3 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{{ title }}</title>
+  <meta name="keywords" content="love,wedding,happiness" />
+  <meta name="description" content="Adrian and Jess are gettin' hitched" />
+  {% load static from staticfiles %}
+  <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+  <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="top" class="beginAnimation">
+  <img src="{% static 'img/adrianhugeneck.gif' %}">
+</div>
+
+<div id="middle" class="beginAnimation">
+    <img src="{% static 'img/jandamarried.png' %}">
+</div>
+
+<div id="hearts" class="beginAnimation">
+  <img src="{% static 'img/hearts.png' %}">
+</div>
+
+<div id="bottom" class="beginAnimation">
+  <img src="{% static 'img/jesshead.gif' %}">
+</div>
+
+<div style="position: absolute; top: 0; left: 0; width: 100%">
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -26,3 +59,10 @@
   <input type="submit" value="login">
 </form>
 {% endif %}
+</div>
+
+<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jess.js' %}"></script>
+
+</body>
+</html>

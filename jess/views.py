@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib import auth
@@ -19,7 +20,7 @@ class RSVPForm(forms.ModelForm):
         }
 
 def home(request):
-    context = {}
+    context = {'title': settings.ALLOWED_HOSTS[0]}
     if request.user.is_authenticated():
         rsvp = request.user.rsvp
         if request.method == 'POST':
