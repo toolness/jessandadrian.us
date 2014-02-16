@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.test.client import Client
 from django.core import mail
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -7,7 +8,12 @@ from django.contrib.auth.models import User
 from .models import RSVP
 from . import email
 
-# Create your tests here.
+class ViewTests(TestCase):
+    def test_login_does_not_accept_empty_passphrases(self):
+        c = Client()
+        response = c.post('/login', {'passphrase': ''}, follow=True)
+        self.assertRegexpMatches(response.content, 'Passphrase required')
+
 class RSVPTests(TestCase):
     def setUp(self):
         user = User(username='john')

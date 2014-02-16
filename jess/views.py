@@ -37,8 +37,12 @@ def home(request):
 
 def login(request):
     if request.method == 'POST':
+        passphrase = request.POST.get('passphrase')
+        if not passphrase:
+            messages.error(request, 'Passphrase required.')
+            return redirect('home')
         try:
-            rsvp = RSVP.objects.get(passphrase=request.POST['passphrase'])
+            rsvp = RSVP.objects.get(passphrase=passphrase)
 
             # http://stackoverflow.com/a/2787747
             rsvp.user.backend = 'django.contrib.auth.backends.ModelBackend'
