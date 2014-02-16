@@ -45,6 +45,9 @@ def login(request):
         try:
             rsvp = RSVP.objects.get(passphrase=passphrase)
 
+            if rsvp.user.is_staff or rsvp.user.is_superuser:
+                return redirect('/admin/')
+
             # http://stackoverflow.com/a/2787747
             rsvp.user.backend = 'django.contrib.auth.backends.ModelBackend'
 

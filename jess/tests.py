@@ -38,6 +38,16 @@ class ViewTests(TestCase):
         response = c.post('/login', {'passphrase': 'lol'}, follow=True)
         self.assertEqual(response.context['user'], user)
 
+    def test_login_redirects_staff_passphrases(self):
+        user = create_user_with_rsvp(username='john', passphrase='lol',
+                                     is_staff=True)
+        c = Client()
+        response = c.post('/login', {'passphrase': 'lol'}, follow=True)
+        self.assertEqual(response.redirect_chain, [
+            ('http://testserver/admin/', 302)
+        ])
+        self.assertNotEqual(response.context['user'], user)
+
 class RSVPTests(TestCase):
     def setUp(self):
         self.user = create_user_with_rsvp(username='john', passphrase='huh')
