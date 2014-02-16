@@ -38,6 +38,14 @@ class ViewTests(TestCase):
         response = c.post('/login', {'passphrase': 'lol'}, follow=True)
         self.assertEqual(response.context['user'], user)
 
+    def test_login_rejects_inactive_users(self):
+        user = create_user_with_rsvp(username='john', passphrase='lol',
+                                     is_active=False)
+        c = Client()
+        response = c.post('/login', {'passphrase': 'lol'}, follow=True)
+        self.assertNotEqual(response.context['user'], user)
+        self.assertRegexpMatches(response.content, 'Unknown passphrase')
+
     def test_login_redirects_staff_passphrases(self):
         user = create_user_with_rsvp(username='john', passphrase='lol',
                                      is_staff=True)

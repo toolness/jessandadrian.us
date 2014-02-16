@@ -45,6 +45,9 @@ def login(request):
         try:
             rsvp = RSVP.objects.get(passphrase=passphrase)
 
+            if not rsvp.user.is_active:
+                raise ObjectDoesNotExist()
+
             if rsvp.user.is_staff or rsvp.user.is_superuser:
                 return redirect('/admin/')
 
