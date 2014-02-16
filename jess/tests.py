@@ -8,6 +8,19 @@ from django.contrib.auth.models import User
 from .models import RSVP
 from . import email
 
+def create_user_with_rsvp(**kwargs):
+    user = User()
+    rsvp = RSVP()
+    for key in kwargs:
+        if hasattr(user, key):
+            setattr(user, key, kwargs[key])
+        else:
+            setattr(rsvp, key, kwargs[key])
+    user.save()
+    rsvp.user = user
+    rsvp.save()
+    return user
+
 class ViewTests(TestCase):
     def test_login_does_not_accept_empty_passphrases(self):
         c = Client()
@@ -20,24 +33,14 @@ class ViewTests(TestCase):
         self.assertRegexpMatches(response.content, 'Unknown passphrase')
 
     def test_login_accepts_valid_passphrases(self):
-        user = User(username='john')
-        user.save()
-        rsvp = RSVP(user=user)
-        rsvp.passphrase = 'lol'
-        rsvp.save()
-
+        user = create_user_with_rsvp(username='john', passphrase='lol')
         c = Client()
         response = c.post('/login', {'passphrase': 'lol'}, follow=True)
         self.assertEqual(response.context['user'], user)
 
 class RSVPTests(TestCase):
     def setUp(self):
-        user = User(username='john')
-        user.save()
-        rsvp = RSVP(user=user)
-        rsvp.passphrase = 'a unique passphrase'
-        rsvp.save()
-        self.user = user
+        self.user = create_user_with_rsvp(username='john', passphrase='huh')
 
     def test_attending_with_no_guests_is_impossible(self):
         rsvp = self.user.rsvp
