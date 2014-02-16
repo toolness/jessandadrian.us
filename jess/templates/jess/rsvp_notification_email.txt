@@ -1,10 +1,14 @@
 Subject: {{ rsvp.user.get_full_name }} has updated their RSVP!
 
 {% if rsvp.is_attending %}
-Hooray, {{ rsvp.user.first_name }} is attending the event with
-{{ rsvp.number_of_guests }} guest(s) (including themselves).
+Hooray, {{ rsvp.user.first_name }} is attending the event with {{ rsvp.number_of_guests }} guest(s) (including themselves).
 
-Their song is "{{ rsvp.song }}".
+{% if rsvp.song %}
+Their favorite song is "{{ rsvp.song }}".
+{% else %}
+They did not choose a song. :(
+{% endif %}
+
 {% else %}
 Alas, {{ rsvp.user.first_name }} will not be attending the event.
 {% endif %}
