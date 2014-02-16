@@ -14,6 +14,22 @@ class ViewTests(TestCase):
         response = c.post('/login', {'passphrase': ''}, follow=True)
         self.assertRegexpMatches(response.content, 'Passphrase required')
 
+    def test_login_rejects_incorrect_passphrases(self):
+        c = Client()
+        response = c.post('/login', {'passphrase': 'lol'}, follow=True)
+        self.assertRegexpMatches(response.content, 'Unknown passphrase')
+
+    def test_login_accepts_valid_passphrases(self):
+        user = User(username='john')
+        user.save()
+        rsvp = RSVP(user=user)
+        rsvp.passphrase = 'lol'
+        rsvp.save()
+
+        c = Client()
+        response = c.post('/login', {'passphrase': 'lol'}, follow=True)
+        self.assertEqual(response.context['user'], user)
+
 class RSVPTests(TestCase):
     def setUp(self):
         user = User(username='john')
