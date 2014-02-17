@@ -34,34 +34,7 @@
 <a class="rsvp" href="{% url 'rsvp' %}"><img src="{% static 'img/rsvp-button.png' %}"></a>
 
 <div class="rsvp-form" {% if not show_rsvp_form %}style="display: none"{% endif %}>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-{% if user.is_authenticated %}
-<p>Hello {{ user.first_name }}!</p>
-
-<form method="post" autocomplete="off">
-  {% csrf_token %}
-  {{ rsvp_form.as_p }}
-  <input type="submit" value="RSVP">
-</form>
-
-<form method="post" action="{% url 'logout' %}" class="logout">
-  {% csrf_token %}
-  <input type="submit" value="Log out">
-</form>
-{% else %}
-<form method="post" action="{% url 'login' %}" autocomplete="off">
-  {% csrf_token %}
-  passphrase: <input type="text" name="passphrase">
-  <input type="submit" value="login">
-</form>
-{% endif %}
+  {% include 'jess/rsvp_form.html' %}
 </div>
 
 <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
