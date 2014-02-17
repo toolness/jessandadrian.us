@@ -10,16 +10,16 @@
   <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
   <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
-  <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+<div id="animation">
 <div id="top" class="beginAnimation">
   <img src="{% static 'img/adrianhugeneck.gif' %}">
 </div>
 
 <div id="middle" class="beginAnimation">
-    <img src="{% static 'img/jandamarried.png' %}">
+  <img src="{% static 'img/jandamarried.png' %}" alt="Jess and Adrian are getting married on June 28, 2014">
 </div>
 
 <div id="hearts" class="beginAnimation">
@@ -29,8 +29,11 @@
 <div id="bottom" class="beginAnimation">
   <img src="{% static 'img/jesshead.gif' %}">
 </div>
+</div>
 
-<div style="position: absolute; top: 0; left: 0; width: 100%">
+<img class="rsvp" src="{% static 'img/rsvp-button.png' %}">
+
+<div class="rsvp-form">
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -40,7 +43,7 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-<p>hi {{ user }}</p>
+<p>Hello {{ user.first_name }}!</p>
 
 <form method="post" autocomplete="off">
   {% csrf_token %}
@@ -48,9 +51,9 @@
   <input type="submit" value="RSVP">
 </form>
 
-<form method="post" action="{% url 'logout' %}">
+<form method="post" action="{% url 'logout' %}" class="logout">
   {% csrf_token %}
-  <input type="submit" value="logout">
+  <input type="submit" value="Log out">
 </form>
 {% else %}
 <form method="post" action="{% url 'login' %}">

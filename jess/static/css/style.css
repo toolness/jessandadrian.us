@@ -1,3 +1,44 @@
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  background:#FFFFFF url('../img/background.jpg') repeat fixed center;
+  /* Taken from http://intavant.com/blog/2012/futura-web-font-alternatives/ */
+  font-family: Futura, Futura-Medium, "Futura Medium", "Century Gothic", CenturyGothic, "Apple Gothic", AppleGothic, "URW Gothic L", "Avant Garde", sans-serif;
+}
+
+.rsvp-form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f26722;
+  padding: 10px;
+}
+
+.rsvp-form input[type="submit"] {
+  background-color: #65bd94;
+  border: none;
+  padding: 4px;
+  border-radius: 2px;
+  cursor: pointer;
+  color: white;
+}
+
+.rsvp-form input {
+  font-family: inherit;
+}
+
+.rsvp {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
 @-webkit-keyframes face {
   0% { top:0% }
   100% { top:100%; margin-top:-2780px }
@@ -63,12 +104,6 @@
   70% { opacity:0.0;filter:alpha(opacity=0); }
   100% { opacity:1.0;filter:alpha(opacity=100); }
 }
-
-
-body{
-  background:#FFFFFF url('../img/background.jpg') repeat fixed center;
-}
-
 
 .beginAnimation {
   -webkit-animation: all 0s 0 linear backwards !important;
