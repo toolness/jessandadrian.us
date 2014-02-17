@@ -31,9 +31,9 @@
 </div>
 </div>
 
-<img class="rsvp" src="{% static 'img/rsvp-button.png' %}">
+<a class="rsvp" href="{% url 'rsvp' %}"><img src="{% static 'img/rsvp-button.png' %}"></a>
 
-<div class="rsvp-form">
+<div class="rsvp-form" {% if not show_rsvp_form %}style="display: none"{% endif %}>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

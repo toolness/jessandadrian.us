@@ -19,8 +19,11 @@ class RSVPForm(forms.ModelForm):
             'song': 'What is a song you would like to dance to?'
         }
 
-def home(request):
-    context = {'title': settings.ALLOWED_HOSTS[0]}
+def render_home(request, show_rsvp_form):
+    context = {
+        'title': settings.ALLOWED_HOSTS[0],
+        'show_rsvp_form': show_rsvp_form
+    }
     if request.user.is_authenticated():
         rsvp = request.user.rsvp
         if request.method == 'POST':
@@ -35,19 +38,25 @@ def home(request):
                     msg = 'Bummer! The wedding staff has been notified ' \
                           'of your inability to attend.'
                 messages.success(request, msg)
-                return redirect('home')
+                return redirect('rsvp')
             messages.error(request, 'Your RSVP has some problems.')
         else:
             rsvp_form = RSVPForm(instance=rsvp)
         context['rsvp_form'] = rsvp_form
     return render(request, 'jess/home.html', context)
 
+def rsvp(request):
+    return render_home(request, show_rsvp_form=True)
+
+def home(request):
+    return render_home(request, show_rsvp_form=False)
+
 def login(request):
     if request.method == 'POST':
         passphrase = request.POST.get('passphrase')
         if not passphrase:
             messages.error(request, 'Passphrase required.')
-            return redirect('home')
+            return redirect('rsvp')
         try:
             rsvp = RSVP.objects.get(passphrase=passphrase)
 
@@ -63,7 +72,7 @@ def login(request):
             auth.login(request, rsvp.user)
         except ObjectDoesNotExist, e:
             messages.error(request, 'Unknown passphrase.')
-    return redirect('home')
+    return redirect('rsvp')
 
 def logout(request):
     if request.method == 'POST': auth.logout(request)
