@@ -26,9 +26,15 @@ def home(request):
         if request.method == 'POST':
             rsvp_form = RSVPForm(request.POST, instance=rsvp)
             if rsvp_form.is_valid():
-                messages.success(request, 'RSVP updated! Thanks, buddy.')
                 rsvp_form.save()
                 notify_all_staff_of_rsvp(rsvp)
+                if rsvp.is_attending:
+                    msg = 'Awesome! The wedding staff has been notified ' \
+                          'and eagerly awaits your arrival.'
+                else:
+                    msg = 'Bummer! The wedding staff has been notified ' \
+                          'of your inability to attend.'
+                messages.success(request, msg)
                 return redirect('home')
             messages.error(request, 'Your RSVP has some problems.')
         else:
