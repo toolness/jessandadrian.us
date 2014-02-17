@@ -1,9 +1,12 @@
+import json
 from django import forms
+from django.http import HttpResponse
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from .models import RSVP
 from .email import notify_all_staff_of_rsvp
 
@@ -44,6 +47,13 @@ def render_home(request, show_rsvp_form):
             rsvp_form = RSVPForm(instance=rsvp)
         context['rsvp_form'] = rsvp_form
     return render(request, 'jess/home.html', context)
+
+def routes(request):
+    routes = {}
+    for route in ['home', 'rsvp', 'login', 'logout']:
+        routes[reverse(route)[1:]] = route
+    return HttpResponse('var ROUTES = %s;' % json.dumps(routes),
+                        content_type='application/javascript')
 
 def rsvp(request):
     return render_home(request, show_rsvp_form=True)
