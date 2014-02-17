@@ -3,6 +3,8 @@ from django import forms
 from django.http import HttpResponse
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.template import RequestContext
 from django.contrib import messages
 from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
@@ -46,12 +48,20 @@ def render_home(request, show_rsvp_form):
         else:
             rsvp_form = RSVPForm(instance=rsvp)
         context['rsvp_form'] = rsvp_form
+    if request.META.get('HTTP_ACCEPT') == 'application/json':
+        return HttpResponse(json.dumps({
+            'path': request.path,
+            'rsvp_form': render_to_string('jess/rsvp_form.html', context,
+                                          RequestContext(request))
+        }), content_type='application/json')
     return render(request, 'jess/home.html', context)
 
 def routes(request):
-    routes = {}
-    for route in ['home', 'rsvp', 'login', 'logout']:
-        routes[reverse(route)[1:]] = route
+    routes = {'backbone': {}, 'form': {}}
+    for route in ['home', 'rsvp']:
+        routes['backbone'][reverse(route)[1:]] = route
+    for route in ['rsvp', 'login', 'logout']:
+        routes['form'][reverse(route)[1:]] = route
     return HttpResponse('var ROUTES = %s;' % json.dumps(routes),
                         content_type='application/javascript')
 

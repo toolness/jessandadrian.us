@@ -9,7 +9,7 @@
 {% if user.is_authenticated %}
 <p>Hello {{ user.first_name }}!</p>
 
-<form method="post" autocomplete="off">
+<form method="post" action="{% url 'rsvp' %}" autocomplete="off">
   {% csrf_token %}
   {{ rsvp_form.as_p }}
   <input type="submit" value="RSVP">

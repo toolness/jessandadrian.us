@@ -1,5 +1,5 @@
 var Router = Backbone.Router.extend({
-  routes: ROUTES,
+  routes: ROUTES.backbone,
   home: function() {
     $('.rsvp-form').slideUp();
   },
@@ -7,6 +7,54 @@ var Router = Backbone.Router.extend({
     $('.rsvp-form').slideDown();
   }
 });
+
+var FormSubmitHandlers = {
+  _post: function(form, cb) {
+    var request = new XMLHttpRequest();
+    request.open('POST', $(form).attr('action'));
+    request.setRequestHeader('Accept', 'application/json');
+    request.onreadystatechange = function() {
+      if (request.readyState != 4) return;
+
+      var contentType = request.getResponseHeader('Content-Type');
+      var response;
+      if (request.status == 200 && contentType == 'application/json') {
+        try {
+          response = JSON.parse(request.responseText);
+        } catch (e) {
+          return alert("Error! Invalid JSON.");
+        }
+        if (cb) {
+          cb(response);
+        } else {
+          Backbone.history.navigate(response.path.slice(1), {
+            trigger: true
+          });
+          $('.rsvp-form').html(response.rsvp_form)
+        }
+      } else {
+        alert("Error! Response code " + request.status + " and type " +
+              contentType);
+      }
+    };
+    request.send(new FormData(form));
+    return false;
+  },
+  rsvp: function(form) {
+    return this._post(form);
+  },
+  login: function(form) {
+    return this._post(form);
+  },
+  logout: function(form) {
+    return this._post(form, function(response) {
+      Backbone.history.navigate(response.path.slice(1));
+      $('.rsvp-form').slideUp(function() {
+        $(this).html(response.rsvp_form);
+      });
+    });
+  }
+};
 
 function doesRouteExist(path) {
   return _.any(Backbone.history.handlers, function(handler) {
@@ -27,6 +75,16 @@ $(document).ready(function() {
       Backbone.history.navigate(fragment, {trigger: true});
       return false;
     }
+  });
+
+  $(document.body).on('submit', 'form[action^="/"]', function(e) {
+    var fragment = $(this).attr('action').slice(1);
+    var routeName = ROUTES.form[fragment];
+
+    if ($(this).attr('method').toUpperCase() != "POST") return;
+    if (!(routeName && FormSubmitHandlers[routeName])) return;
+
+    return FormSubmitHandlers[routeName](this);
   });
 
   Backbone.history.start({
