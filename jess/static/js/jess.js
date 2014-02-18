@@ -9,8 +9,9 @@ var Router = Backbone.Router.extend({
 });
 
 var FormSubmitHandlers = {
-  _post: function(form, cb) {
+  _post: function(form, noSlideDown) {
     var request = new XMLHttpRequest();
+    var rsvpForm = $('.rsvp-form');
     request.open('POST', $(form).attr('action'));
     request.setRequestHeader('Accept', 'application/json');
     request.onreadystatechange = function() {
@@ -24,20 +25,19 @@ var FormSubmitHandlers = {
         } catch (e) {
           return alert("Error! Invalid JSON.");
         }
-        if (cb) {
-          cb(response);
-        } else {
-          Backbone.history.navigate(response.path.slice(1), {
-            trigger: true
-          });
-          $('.rsvp-form').html(response.rsvp_form)
-        }
+        Backbone.history.navigate(response.path.slice(1));
+        rsvpForm.queue(function() {
+          rsvpForm.html(response.rsvp_form);
+          if (!noSlideDown) rsvpForm.slideDown();
+          rsvpForm.dequeue();
+        });
       } else {
         alert("Error! Response code " + request.status + " and type " +
               contentType);
       }
     };
     request.send(new FormData(form));
+    rsvpForm.slideUp();
     return false;
   },
   rsvp: function(form) {
@@ -47,12 +47,7 @@ var FormSubmitHandlers = {
     return this._post(form);
   },
   logout: function(form) {
-    return this._post(form, function(response) {
-      Backbone.history.navigate(response.path.slice(1));
-      $('.rsvp-form').slideUp(function() {
-        $(this).html(response.rsvp_form);
-      });
-    });
+    return this._post(form, true);
   }
 };
 
