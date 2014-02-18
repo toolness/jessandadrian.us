@@ -78,13 +78,10 @@ def login(request):
             messages.error(request, 'Passphrase required.')
             return redirect('rsvp')
         try:
-            rsvp = RSVP.objects.get(passphrase=passphrase)
-
-            if not rsvp.user.is_active:
-                raise ObjectDoesNotExist()
-
-            if rsvp.user.is_staff or rsvp.user.is_superuser:
-                return redirect('/admin/')
+            rsvp = RSVP.objects.get(passphrase=passphrase,
+                                    user__is_active=True,
+                                    user__is_staff=False,
+                                    user__is_superuser=False)
 
             # http://stackoverflow.com/a/2787747
             rsvp.user.backend = 'django.contrib.auth.backends.ModelBackend'
