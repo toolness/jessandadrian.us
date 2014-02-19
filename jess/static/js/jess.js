@@ -1,10 +1,12 @@
 var Router = Backbone.Router.extend({
   routes: ROUTES.backbone,
   _showFormContent: function(sel) {
-    $('.rsvp-form-content').hide().filter(sel).show();
-    $('.rsvp-form').slideDown();
+    $('.rsvp-form').stop().slideUp('fast').queue(function() {
+      $('.rsvp-form-content').hide().filter(sel).show();
+      $(this).dequeue();
+    }).slideDown('fast');
   },
-  home: function() { $('.rsvp-form').slideUp(); },
+  home: function() { $('.rsvp-form').stop().slideUp('fast'); },
   rsvp: function() { this._showFormContent('#rsvp'); },
   rsvp_yay: function() { this._showFormContent('#yay'); },
   rsvp_boo: function() { this._showFormContent('#boo'); }
