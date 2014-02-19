@@ -10,11 +10,15 @@
  {% if rsvp_result != 'yay' %}style="display: none"{% endif %}>
   <p>Awesome! The wedding staff has been notified and
     eagerly awaits your arrival.</p>
+  <p>If circumstances change, you can always come back here and
+    <a href="{% url 'rsvp' %}">revise</a> your RSVP.</p>
 </div>
 <div id="boo" class="rsvp-form-content"
  {% if rsvp_result != 'boo' %}style="display: none"{% endif %}>
   <p>Bummer! The wedding staff has been notified of your inability to
     attend.</p>
+  <p>If anything changes, though, you can always come back here and
+    <a href="{% url 'rsvp' %}">revise</a> your RSVP.</p>
 </div>
 <div id="rsvp" class="rsvp-form-content"
  {% if rsvp_result %}style="display: none"{% endif %}>

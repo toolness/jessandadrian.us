@@ -32,6 +32,10 @@ body {
   font-family: inherit;
 }
 
+.rsvp-form a {
+  color: inherit;
+}
+
 .rsvp {
   position: absolute;
   right: 10px;
