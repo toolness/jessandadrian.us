@@ -22,6 +22,16 @@ def create_user_with_rsvp(**kwargs):
     return user
 
 class ViewTests(TestCase):
+    def test_views_return_OK(self):
+        for path in ['/', '/rsvp', '/rsvp/yay', '/rsvp/boo', '/routes.js']:
+            c = Client()
+            response = c.get(path)
+            if response.status_code != 200:
+                raise Exception('GET %s returned %d' % (
+                    path,
+                    response.status_code)
+                )
+
     def test_login_does_not_accept_empty_passphrases(self):
         c = Client()
         response = c.post('/login', {'passphrase': ''}, follow=True)

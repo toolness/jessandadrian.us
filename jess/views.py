@@ -22,36 +22,34 @@ class RSVPForm(forms.ModelForm):
             'song': 'What is a song you would like to dance to?'
         }
 
-def home(show_rsvp_form=False, rsvp_result=None):
-    def view(request):
-        context = {
-            'title': settings.ALLOWED_HOSTS[0],
-            'show_rsvp_form': show_rsvp_form,
-            'rsvp_result': rsvp_result
-        }
-        if request.user.is_authenticated():
-            rsvp = request.user.rsvp
-            if request.method == 'POST':
-                rsvp_form = RSVPForm(request.POST, instance=rsvp)
-                if rsvp_form.is_valid():
-                    rsvp_form.save()
-                    notify_all_staff_of_rsvp(rsvp)
-                    if rsvp.is_attending:
-                        return redirect('rsvp_yay')
-                    else:
-                        return redirect('rsvp_boo')
-                messages.error(request, 'Your RSVP has some problems.')
-            else:
-                rsvp_form = RSVPForm(instance=rsvp)
-            context['rsvp_form'] = rsvp_form
-        if request.META.get('HTTP_ACCEPT') == 'application/json':
-            return HttpResponse(json.dumps({
-                'path': request.path,
-                'rsvp_form': render_to_string('jess/rsvp_form.html', context,
-                                              RequestContext(request))
-            }), content_type='application/json')
-        return render(request, 'jess/home.html', context)
-    return view
+def home(request, show_rsvp_form=False, rsvp_result=None):
+    context = {
+        'title': settings.ALLOWED_HOSTS[0],
+        'show_rsvp_form': show_rsvp_form,
+        'rsvp_result': rsvp_result
+    }
+    if request.user.is_authenticated():
+        rsvp = request.user.rsvp
+        if request.method == 'POST':
+            rsvp_form = RSVPForm(request.POST, instance=rsvp)
+            if rsvp_form.is_valid():
+                rsvp_form.save()
+                notify_all_staff_of_rsvp(rsvp)
+                if rsvp.is_attending:
+                    return redirect('rsvp_yay')
+                else:
+                    return redirect('rsvp_boo')
+            messages.error(request, 'Your RSVP has some problems.')
+        else:
+            rsvp_form = RSVPForm(instance=rsvp)
+        context['rsvp_form'] = rsvp_form
+    if request.META.get('HTTP_ACCEPT') == 'application/json':
+        return HttpResponse(json.dumps({
+            'path': request.path,
+            'rsvp_form': render_to_string('jess/rsvp_form.html', context,
+                                          RequestContext(request))
+        }), content_type='application/json')
+    return render(request, 'jess/home.html', context)
 
 def routes(request):
     routes = {'backbone': {}, 'form': {}}
