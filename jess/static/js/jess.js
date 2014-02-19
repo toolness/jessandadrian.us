@@ -1,11 +1,13 @@
 var Router = Backbone.Router.extend({
   routes: ROUTES.backbone,
-  home: function() {
-    $('.rsvp-form').slideUp();
-  },
-  rsvp: function() {
+  _showFormContent: function(sel) {
+    $('.rsvp-form-content').hide().filter(sel).show();
     $('.rsvp-form').slideDown();
-  }
+  },
+  home: function() { $('.rsvp-form').slideUp(); },
+  rsvp: function() { this._showFormContent('#rsvp'); },
+  rsvp_yay: function() { this._showFormContent('#yay'); },
+  rsvp_boo: function() { this._showFormContent('#boo'); }
 });
 
 var FormSubmitHandlers = {
@@ -40,15 +42,9 @@ var FormSubmitHandlers = {
     rsvpForm.slideUp();
     return false;
   },
-  rsvp: function(form) {
-    return this._post(form);
-  },
-  login: function(form) {
-    return this._post(form);
-  },
-  logout: function(form) {
-    return this._post(form, true);
-  }
+  rsvp: function(form) { return this._post(form); },
+  login: function(form) { return this._post(form); },
+  logout: function(form) { return this._post(form, true); }
 };
 
 function doesRouteExist(path) {

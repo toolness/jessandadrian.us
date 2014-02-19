@@ -6,6 +6,19 @@
 </ul>
 {% endif %}
 
+<div id="yay" class="rsvp-form-content"
+ {% if rsvp_result != 'yay' %}style="display: none"{% endif %}>
+  <p>Awesome! The wedding staff has been notified and
+    eagerly awaits your arrival.</p>
+</div>
+<div id="boo" class="rsvp-form-content"
+ {% if rsvp_result != 'boo' %}style="display: none"{% endif %}>
+  <p>Bummer! The wedding staff has been notified of your inability to
+    attend.</p>
+</div>
+<div id="rsvp" class="rsvp-form-content"
+ {% if rsvp_result %}style="display: none"{% endif %}>
+
 {% if user.is_authenticated %}
 <p>Hello {{ user.first_name }}!</p>
 
@@ -15,14 +28,18 @@
   <input type="submit" value="RSVP">
 </form>
 
-<form method="post" action="{% url 'logout' %}" class="logout">
-  {% csrf_token %}
-  <input type="submit" value="Log out">
-</form>
 {% else %}
 <form method="post" action="{% url 'login' %}" autocomplete="off">
   {% csrf_token %}
   passphrase: <input type="text" name="passphrase">
   <input type="submit" value="login">
+</form>
+{% endif %}
+</div>
+
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'logout' %}" class="logout">
+  {% csrf_token %}
+  <input type="submit" value="Log out">
 </form>
 {% endif %}

@@ -24,10 +24,11 @@ class RSVPForm(forms.ModelForm):
             'song': 'What is a song you would like to dance to?'
         }
 
-def render_home(request, show_rsvp_form):
+def render_home(request, show_rsvp_form, rsvp_result=None):
     context = {
         'title': settings.ALLOWED_HOSTS[0],
-        'show_rsvp_form': show_rsvp_form
+        'show_rsvp_form': show_rsvp_form,
+        'rsvp_result': rsvp_result
     }
     if request.user.is_authenticated():
         rsvp = request.user.rsvp
@@ -37,13 +38,9 @@ def render_home(request, show_rsvp_form):
                 rsvp_form.save()
                 notify_all_staff_of_rsvp(rsvp)
                 if rsvp.is_attending:
-                    msg = 'Awesome! The wedding staff has been notified ' \
-                          'and eagerly awaits your arrival.'
+                    return redirect('rsvp_yay')
                 else:
-                    msg = 'Bummer! The wedding staff has been notified ' \
-                          'of your inability to attend.'
-                messages.success(request, msg)
-                return redirect('rsvp')
+                    return redirect('rsvp_boo')
             messages.error(request, 'Your RSVP has some problems.')
         else:
             rsvp_form = RSVPForm(instance=rsvp)
@@ -58,12 +55,18 @@ def render_home(request, show_rsvp_form):
 
 def routes(request):
     routes = {'backbone': {}, 'form': {}}
-    for route in ['home', 'rsvp']:
+    for route in ['home', 'rsvp', 'rsvp_yay', 'rsvp_boo']:
         routes['backbone'][reverse(route)[1:]] = route
     for route in ['rsvp', 'login', 'logout']:
         routes['form'][reverse(route)[1:]] = route
     return HttpResponse('var ROUTES = %s;' % json.dumps(routes),
                         content_type='application/javascript')
+
+def rsvp_yay(request):
+    return render_home(request, show_rsvp_form=True, rsvp_result='yay')
+
+def rsvp_boo(request):
+    return render_home(request, show_rsvp_form=True, rsvp_result='boo')
 
 def rsvp(request):
     return render_home(request, show_rsvp_form=True)
