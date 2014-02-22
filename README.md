@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/toolness/jessandadrian.us.png?branch=master)](http://travis-ci.org/toolness/jessandadrian.us)
+
 ## Requirements
 
 * Python 2.7
