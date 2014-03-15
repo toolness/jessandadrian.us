@@ -65,37 +65,35 @@ class ImportGuestListCommand(BaseCommand):
                 is_admin = bool(info['is-admin'])
                 email = info['email']
                 username = info['username'] or slugify(u'%s %s' % (first_name, last_name))
-                print "%(user_id)3d %(num_guests)2d %(is_attending)5s %(first_name)s %(last_name)s %(music_selection)s" % locals()
+
                 try:
                     user = User.objects.get(pk=user_id)
                 except ObjectDoesNotExist:
-                    user = User(
-                        pk=user_id,
-                        username=username,
-                        first_name=first_name,
-                        last_name=last_name,
-                        is_active=True,
-                        is_staff=is_admin,
-                        is_superuser=is_admin,
-                        email=email
-                    )
+                    user = User(pk=user_id, username=username)
                     user.set_unusable_password()
                     user.save()
+
                 try:
                     rsvp = user.rsvp
                 except ObjectDoesNotExist:
-                    rsvp = RSVP(
-                        user=user,
-                        passphrase=passphrase,
-                        is_attending=is_attending,
-                        song=music_selection,
-                        number_of_guests=num_guests,
-                    )
+                    rsvp = RSVP(user=user)
                 if not rsvp.passphrase:
                     rsvp.passphrase = self.generate_passphrase(word_list)
-                    print 'new passphrase for %s: %s' % (first_name,
-                                                         rsvp.passphrase)
+                    self.stdout.write('new passphrase for %s: %s' % (
+                        first_name,
+                        rsvp.passphrase
+                    ))
+
+                user.first_name = first_name
+                user.last_name = last_name
+                user.is_active = True
+                user.is_staff = user.is_superuser = is_admin
+                user.email = email
                 user.save()
+
+                rsvp.is_attending = is_attending
+                rsvp.song = music_selection
+                rsvp.number_of_guests = num_guests
                 rsvp.save()
             except Exception:
                 self.stderr.write('Error importing row '
