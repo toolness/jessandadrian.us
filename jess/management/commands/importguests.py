@@ -64,7 +64,10 @@ class ImportGuestListCommand(BaseCommand):
                 passphrase = info['passphrase']
                 is_admin = bool(info['is-admin'])
                 email = info['email']
-                username = info['username'] or slugify(u'%s %s' % (first_name, last_name))
+                username = info['username'] or slugify(u'%s %s' % (
+                    first_name,
+                    last_name
+                ))
 
                 try:
                     user = User.objects.get(pk=user_id)
