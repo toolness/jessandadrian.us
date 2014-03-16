@@ -13,6 +13,30 @@ from jess.models import RSVP
 class DryRunFinished(Exception):
     pass
 
+class RowDict(dict):
+    def __init__(self, row, column_names, *args, **kwargs):
+        dict.__init__(self, *args, **kwargs)
+        self.row = row
+        self.column_names = column_names
+
+    def colnum(self, column_name):
+        return self.column_names.index(column_name) + 1
+
+def normalize_guest_rowdict(info):
+    COERCIONS = {
+        'id': int,
+        'actual-number-of-guests': int,
+        'is-attending': bool,
+        'is-admin': bool,
+    }
+    if not info['actual-number-of-guests']:
+        info['actual-number-of-guests'] = '0'
+    for key, coercer in COERCIONS.items():
+        info[key] = coercer(info[key])
+    if not info['username']:
+        info['username'] = slugify(u'%(first-name)s %(last-name)s' % info)
+    return info
+
 def convert_rows_to_dicts(rows):
     column_names = None
     dicts = []
@@ -22,7 +46,7 @@ def convert_rows_to_dicts(rows):
             column_names = tuple([slugify(unicode(val)) for val in row])
         else:
             # An actual row with information about a guest.
-            info = {'row': i + 1}
+            info = RowDict(row=i + 1, column_names=column_names)
             for colnum, val in enumerate(row):
                 colname = column_names[colnum]
                 if colname:
@@ -56,18 +80,16 @@ class ImportGuestListCommand(BaseCommand):
         for info in convert_rows_to_dicts(rows):
             first_name = info['first-name']
             try:
-                user_id = int(info['id'])
+                normalize_guest_rowdict(info)
+                user_id = info['id']
                 last_name = info['last-name']
-                num_guests = int(info['actual-number-of-guests'] or 0)
-                is_attending = bool(info['is-attending'])
+                num_guests = info['actual-number-of-guests']
+                is_attending = info['is-attending']
                 music_selection = info['music-selection']
                 passphrase = info['passphrase']
-                is_admin = bool(info['is-admin'])
+                is_admin = info['is-admin']
                 email = info['email']
-                username = info['username'] or slugify(u'%s %s' % (
-                    first_name,
-                    last_name
-                ))
+                username = info['username']
 
                 try:
                     user = User.objects.get(pk=user_id)
@@ -80,15 +102,16 @@ class ImportGuestListCommand(BaseCommand):
                     rsvp = user.rsvp
                 except ObjectDoesNotExist:
                     rsvp = RSVP(user=user)
-                if not rsvp.passphrase:
-                    rsvp.passphrase = self.generate_passphrase(word_list)
+                if not passphrase:
+                    passphrase = self.generate_passphrase(word_list)
                     self.stdout.write('new passphrase for %s: %s' % (
                         first_name,
-                        rsvp.passphrase
+                        passphrase
                     ))
 
                 user.first_name = first_name
                 user.last_name = last_name
+                user.username = username
                 user.is_active = True
                 user.is_staff = user.is_superuser = is_admin
                 user.email = email
@@ -97,10 +120,11 @@ class ImportGuestListCommand(BaseCommand):
                 rsvp.is_attending = is_attending
                 rsvp.song = music_selection
                 rsvp.number_of_guests = num_guests
+                rsvp.passphrase = passphrase
                 rsvp.save()
             except Exception:
                 self.stderr.write('Error importing row '
-                                  '%d (%s)' % (info['row'], first_name))
+                                  '%d (%s)' % (info.row, first_name))
                 raise
 
     def handle(self, *args, **options):
@@ -110,6 +134,7 @@ class ImportGuestListCommand(BaseCommand):
             with transaction.atomic():
                 self.import_rows(rows, word_list)
                 if options['dry_run']: raise DryRunFinished()
+            self.stdout.write("Import complete.")
         except DryRunFinished:
             self.stdout.write("Dry run complete.")
 

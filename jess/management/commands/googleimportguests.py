@@ -16,6 +16,10 @@ Required environment variables:
   WORDLIST_URL should be set to the Google spreadsheet URL for the word
   list."""
 
+def get_google_client():
+    validate_env_vars()
+    return gspread.login(*os.environ['GOOGLE_SECRET_AUTH'].split(':'))
+
 def validate_env_vars():
     if (not 'GOOGLE_SECRET_AUTH' in os.environ or
         len(os.environ['GOOGLE_SECRET_AUTH'].split(':')) != 2):
@@ -31,8 +35,7 @@ class Command(ImportGuestListCommand):
     help = 'Import guest list from Google spreadsheets.\n' + ENV_VAR_DOCS
 
     def get_rows_and_word_list(self, *args, **options):
-        validate_env_vars()
-        gc = gspread.login(*os.environ['GOOGLE_SECRET_AUTH'].split(':'))
+        gc = get_google_client()
         guestlist = gc.open_by_url(os.environ['GUESTLIST_URL']).sheet1
         wordlist = gc.open_by_url(os.environ['WORDLIST_URL']).sheet1
         return (guestlist.get_all_values(),
