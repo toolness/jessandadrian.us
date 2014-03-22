@@ -9,7 +9,7 @@ class RSVP(models.Model):
         help_text="The phrase sent to the person/family in the hard-copy "
                   "invitation, allowing them to sign into the site "
                   "without needing to additionally remember a username.",
-        max_length=30,
+        max_length=50,
         unique=True
     )
     is_attending = models.BooleanField(
