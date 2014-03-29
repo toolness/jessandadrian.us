@@ -53,7 +53,7 @@ globals().update(parse_email_backend_url(os.environ['EMAIL_BACKEND_URL']))
 
 ORIGIN = os.environ['ORIGIN']
 
-ALLOWED_HOSTS = [urlparse.urlparse(ORIGIN).hostname]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
