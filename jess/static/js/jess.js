@@ -71,6 +71,7 @@ $(document).ready(function() {
       $('#id_number_of_guests').val(0);
     }
   });
+  $('#attendance-details').toggle($('#id_is_attending')[0].checked);
 
   if (window.history && window.history.pushState)
     $(document.body).on('click', 'a[href^="/"]', function(e) {
