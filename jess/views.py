@@ -24,7 +24,6 @@ class RSVPForm(forms.ModelForm):
 
 def home(request, show_rsvp_form=False, rsvp_result=None):
     context = {
-        'title': settings.ALLOWED_HOSTS[0],
         'show_rsvp_form': show_rsvp_form,
         'rsvp_result': rsvp_result
     }
