@@ -19,17 +19,13 @@ body {
   padding: 10px;
 }
 
-.rsvp-form input[type="submit"] {
+.rsvp-form .btn-default {
   background-color: #65bd94;
   border: none;
-  padding: 4px;
-  border-radius: 2px;
-  cursor: pointer;
-  color: white;
 }
 
-.rsvp-form input {
-  font-family: inherit;
+.rsvp-form label {
+  font-weight: normal;
 }
 
 .rsvp-form a {
