@@ -1,10 +1,8 @@
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% for message in messages %}
+<div class="alert alert-danger">
+  {{ message }}
+</div>
+{% endfor %}
 
 <div id="yay" class="rsvp-form-content"
  {% if rsvp_result != 'yay' %}style="display: none"{% endif %}>
@@ -26,9 +24,36 @@
 {% if user.is_authenticated %}
 <p>Hello {{ user.first_name }}!</p>
 
+{% for error in rsvp_form.non_field_errors %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endfor %}
+
 <form method="post" action="{% url 'rsvp' %}" autocomplete="off">
   {% csrf_token %}
-  {{ rsvp_form.as_p }}
+
+  <div class="form-group">
+    <label for="id_is_attending">Are you attending the wedding?</label>
+    <input id="id_is_attending" name="is_attending" type="checkbox" {% if rsvp_form.is_attending.value %}checked{% endif %}>
+  </div>
+
+  <div class="form-group">
+    {% for error in rsvp_form.number_of_guests.errors %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+
+    <label for="id_number_of_guests">Number of guests</label>
+    <input id="id_number_of_guests" name="number_of_guests" type="number" value="{{ rsvp_form.number_of_guests.value }}">
+  </div>
+
+  <div class="form-group">
+    {% for error in rsvp_form.song.errors %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+
+    <label for="id_song">What is your favorite song?</label>
+    <input id="id_song" name="song" type="text" maxlength="200" value="{{ rsvp_form.song.value }}">
+  </div>
+
   <input type="submit" value="RSVP">
 </form>
 

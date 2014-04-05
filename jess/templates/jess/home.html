@@ -9,6 +9,7 @@
   {% load static from staticfiles %}
   <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 </head>
 
@@ -34,7 +35,9 @@
 <a class="rsvp" href="{% url 'rsvp' %}"><img src="{% static 'img/rsvp-button.png' %}"></a>
 
 <div class="rsvp-form" {% if not show_rsvp_form %}style="display: none"{% endif %}>
+  <div class="container">
   {% include 'jess/rsvp_form.html' %}
+  </div>
 </div>
 
 <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
