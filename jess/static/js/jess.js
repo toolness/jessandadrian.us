@@ -32,6 +32,7 @@ var FormSubmitHandlers = {
         Backbone.history.navigate(response.path.slice(1));
         rsvpForm.queue(function() {
           rsvpForm.html(response.rsvp_form);
+          $('#id_is_attending', rsvpForm).trigger('change');
           if (!noSlideDown) rsvpForm.slideDown();
           rsvpForm.dequeue();
         });
@@ -60,6 +61,15 @@ $(document).ready(function() {
 
   $('#animation').click(function() {
     $('div', this).toggleClass('beginAnimation');
+  });
+
+  $(document.body).on('change', '#id_is_attending', function(e) {
+    if (this.checked) {
+      $('#attendance-details').slideDown();
+    } else {
+      $('#attendance-details').slideUp();
+      $('#id_number_of_guests').val(0);
+    }
   });
 
   if (window.history && window.history.pushState)
