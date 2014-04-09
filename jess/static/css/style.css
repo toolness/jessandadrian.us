@@ -10,6 +10,14 @@ body {
   font-family: Futura, Futura-Medium, "Futura Medium", "Century Gothic", CenturyGothic, "Apple Gothic", AppleGothic, "URW Gothic L", "Avant Garde", sans-serif;
 }
 
+.left { float: left; }
+.cb { clear: both; }
+
+.guest-rsvp-form .short-input {
+  width: 50%;
+  margin: 20px 10px 20px 0;
+}
+
 .rsvp-form {
   position: absolute;
   top: 0;
@@ -35,8 +43,24 @@ body {
 .rsvp {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 30px;
   cursor: pointer;
+  z-index: 1;
+}
+
+.rsvp-guest {
+  font-size: 40px;
+  color: white;
+  float: left;
+}
+
+.please-enter { margin: 8px 40px; }
+
+.sub-please-enter { color: white; }
+
+.submit-btn {
+  margin-top: 20px;
+  text-transform: uppercase;
 }
 
 @-webkit-keyframes face {

@@ -65,12 +65,16 @@
 {% else %}
 <form method="post" action="{% url 'login' %}" autocomplete="off">
   {% csrf_token %}
-  <div class="form-group">
-    <label for="id_passphrase">Please enter the passphrase that came with your RSVP.</label>
-    <input type="text" name="passphrase" id="id_passphrase" class="form-control">
+  <div class="form-group guest-rsvp-form">
+    <p class="rsvp-guest left">R.S.V.P</p>
+    <div class="left please-enter">
+      <label for="id_passphrase">Guests, please enter your passphrase:</label>
+      <p class="sub-please-enter">(This info came in your invite)</p>
+    </div>
+    <input type="text" name="passphrase" id="id_passphrase" class="form-control short-input left">
   </div>
 
-  <button type="submit" class="btn btn-default">Log in</button>
+  <button type="submit" class="btn btn-default submit-btn">submit</button>
 </form>
 {% endif %}
 </div>
