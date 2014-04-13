@@ -28,17 +28,34 @@ body {
 }
 
 .rsvp-form .btn-default {
+  background-color: #f26722;
+  border: none;
+  color: white;
+}
+
+.rsvp-form .btn-green {
   background-color: #65bd94;
   border: none;
 }
 
+.rsvp-form-white-text { color: white; }
+
 .rsvp-form label {
   font-weight: normal;
 }
+.black-text { color: black; }
 
 .rsvp-form a {
   color: inherit;
 }
+
+.thank-you {
+  width: 80%;
+  color: white;
+  margin: 10px;
+}
+
+.thank-you .rsvp-guest { margin: 0 50px;}
 
 .rsvp {
   position: absolute;
@@ -55,6 +72,9 @@ body {
 }
 
 .please-enter { margin: 8px 40px; }
+.how-many-guests { width: 70%; }
+
+.rsvp-guest-type { margin: 90px 0; }
 
 .sub-please-enter { color: white; }
 

@@ -5,84 +5,87 @@
 </div>
 {% endfor %}
 
-<div id="yay" class="rsvp-form-content"
+<div id="yay" class="rsvp-form-content left thank-you"
  {% if rsvp_result != 'yay' %}style="display: none"{% endif %}>
-  <p>Awesome! The wedding staff has been notified and
+  <p class="rsvp-guest left">R.S.V.P</p>
+  <p >Awesome! The wedding staff has been notified and
     eagerly awaits your arrival.</p>
   <p>If circumstances change, you can always come back here and
     <a href="{% url 'rsvp' %}">revise</a> your RSVP.</p>
 </div>
-<div id="boo" class="rsvp-form-content"
+<div id="boo" class="rsvp-form-content left thank-you"
  {% if rsvp_result != 'boo' %}style="display: none"{% endif %}>
+  <p class="rsvp-guest left">R.S.V.P</p>
   <p>Bummer! The wedding staff has been notified of your inability to
     attend.</p>
   <p>If anything changes, though, you can always come back here and
     <a href="{% url 'rsvp' %}">revise</a> your RSVP.</p>
 </div>
-<div id="rsvp" class="rsvp-form-content"
+
+<div id="rsvp" class="rsvp-form-content rsvp-form-white-text"
  {% if rsvp_result %}style="display: none"{% endif %}>
 
-{% if user.is_authenticated %}
-<p>Hello {{ user.first_name }}!</p>
+  {% if user.is_authenticated %}
+  <p>Hello {{ user.first_name }}!</p>
 
-{% for error in rsvp_form.non_field_errors %}
-<div class="alert alert-danger">{{ error }}</div>
-{% endfor %}
+  {% for error in rsvp_form.non_field_errors %}
+  <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}
 
-<form method="post" action="{% url 'rsvp' %}" autocomplete="off">
-  {% csrf_token %}
-
-  <div class="checkbox">
-    <label for="id_is_attending">
-      <input id="id_is_attending" name="is_attending" type="checkbox" {% if rsvp_form.is_attending.value %}checked{% endif %}>
-      I am attending the wedding.
-    </label>
-  </div>
-
-  <div id="attendance-details">
-    <div class="form-group">
-      {% for error in rsvp_form.number_of_guests.errors %}
-      <div class="alert alert-danger">{{ error }}</div>
-      {% endfor %}
-
-      <label for="id_number_of_guests">Number of guests</label>
-      <input id="id_number_of_guests" name="number_of_guests" type="number" value="{{ rsvp_form.number_of_guests.value }}" class="form-control">
+  <p class="rsvp-guest left rsvp-guest-type">R.S.V.P</p>
+  <form class="left please-enter how-many-guests" method="post" action="{% url 'rsvp' %}" autocomplete="off">
+    {% csrf_token %}
+    <div class="checkbox">
+      <label for="id_is_attending">
+        <input id="id_is_attending" name="is_attending" type="checkbox" {% if rsvp_form.is_attending.value %}checked{% endif %}>
+        I am attending the wedding.
+      </label>
     </div>
 
-    <div class="form-group">
-      {% for error in rsvp_form.song.errors %}
-      <div class="alert alert-danger">{{ error }}</div>
-      {% endfor %}
+    <div id="attendance-details">
+      <div class="form-group">
+        {% for error in rsvp_form.number_of_guests.errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
 
-      <label for="id_song">What is your favorite song?</label>
-      <input id="id_song" name="song" type="text" maxlength="200" value="{{ rsvp_form.song.value }}" class="form-control">
+        <label for="id_number_of_guests">How many guests (including yourself) are coming?</label>
+        <input id="id_number_of_guests" name="number_of_guests" type="number" value="{{ rsvp_form.number_of_guests.value }}" class="form-control">
+      </div>
+
+      <div class="form-group">
+        {% for error in rsvp_form.song.errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+
+        <label for="id_song">What Song would you like to dance to at the wedding? (We plan to cut a rug.)</label>
+        <input id="id_song" name="song" type="text" maxlength="200" value="{{ rsvp_form.song.value }}" class="form-control">
+      </div>
     </div>
-  </div>
 
-  <button type="submit" class="btn btn-default">RSVP</button>
-</form>
+    <button type="submit" class="btn btn-default btn-green">RSVP</button>
+  </form>
 
-{% else %}
-<form method="post" action="{% url 'login' %}" autocomplete="off">
-  {% csrf_token %}
-  <div class="form-group guest-rsvp-form">
-    <p class="rsvp-guest left">R.S.V.P</p>
-    <div class="left please-enter">
-      <label for="id_passphrase">Guests, please enter your passphrase:</label>
-      <p class="sub-please-enter">(This info came in your invite)</p>
+  {% else %}
+  <form method="post" action="{% url 'login' %}" autocomplete="off">
+    {% csrf_token %}
+    <div class="form-group guest-rsvp-form">
+      <p class="rsvp-guest left">R.S.V.P</p>
+      <div class="left please-enter">
+        <label for="id_passphrase" class="black-text">Guests, please enter your passphrase:</label>
+        <p class="sub-please-enter">(This info came in your invite)</p>
+      </div>
+      <input type="text" name="passphrase" id="id_passphrase" class="form-control short-input left">
     </div>
-    <input type="text" name="passphrase" id="id_passphrase" class="form-control short-input left">
-  </div>
 
-  <button type="submit" class="btn btn-default submit-btn">submit</button>
-</form>
-{% endif %}
+    <button type="submit" class="btn btn-default submit-btn btn-green">submit</button>
+  </form>
+  {% endif %}
 </div>
 
 {% if user.is_authenticated %}
 <form method="post" action="{% url 'logout' %}" class="logout">
   {% csrf_token %}
-  <button type="submit" class="btn btn-default btn-xs">Log out</button>
+  <button type="submit" class="btn btn-default btn-xs">X</button>
 </form>
 {% endif %}
 </div>
