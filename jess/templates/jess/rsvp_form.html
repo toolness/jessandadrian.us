@@ -5,13 +5,21 @@
 </div>
 {% endfor %}
 
+<form method="post" action="{% url 'logout' %}" class="logout">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-default btn-xs">X</button>
+</form>
+
 <div id="yay" class="rsvp-form-content left thank-you"
  {% if rsvp_result != 'yay' %}style="display: none"{% endif %}>
   <p class="rsvp-guest left">R.S.V.P</p>
-  <p >Awesome! The wedding staff has been notified and
-    eagerly awaits your arrival.</p>
-  <p>If circumstances change, you can always come back here and
-    <a href="{% url 'rsvp' %}">revise</a> your RSVP.</p>
+  <div>
+    <p >Awesome! The wedding staff has been notified and
+      eagerly awaits your arrival.</p>
+    <p>If circumstances change, you can always come back here and
+      <a href="{% url 'rsvp' %}">revise</a> your RSVP.</p>
+    <p>Jessica and Adrian are registered <a href="http://registry.theknot.com/jessica-klein-adrian-fraser-june-2014-ny/5150721" target="_blank" style="color: #65bd94;">here</a>!</p>
+  </div>
 </div>
 <div id="boo" class="rsvp-form-content left thank-you"
  {% if rsvp_result != 'boo' %}style="display: none"{% endif %}>
@@ -20,6 +28,7 @@
     attend.</p>
   <p>If anything changes, though, you can always come back here and
     <a href="{% url 'rsvp' %}">revise</a> your RSVP.</p>
+  <p>Jessica and Adrian are registered <a href="http://registry.theknot.com/jessica-klein-adrian-fraser-june-2014-ny/5150721" target="_blank" style="color: #65bd94;">here!</a></p>
 </div>
 
 <div id="rsvp" class="rsvp-form-content rsvp-form-white-text"
@@ -81,11 +90,4 @@
   </form>
   {% endif %}
 </div>
-
-{% if user.is_authenticated %}
-<form method="post" action="{% url 'logout' %}" class="logout">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-default btn-xs">X</button>
-</form>
-{% endif %}
 </div>

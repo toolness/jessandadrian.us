@@ -15,7 +15,7 @@ body {
 
 .guest-rsvp-form .short-input {
   width: 50%;
-  margin: 20px 10px 20px 0;
+  margin: 20px 0;
 }
 
 .rsvp-form {
@@ -31,6 +31,7 @@ body {
   background-color: #f26722;
   border: none;
   color: white;
+  float: right;
 }
 
 .rsvp-form .btn-green {
@@ -55,7 +56,10 @@ body {
   margin: 10px;
 }
 
-.thank-you .rsvp-guest { margin: 0 50px;}
+.thank-you .rsvp-guest {
+  margin: 0 50px;
+  margin-bottom: 50px;
+}
 
 .rsvp {
   position: absolute;
@@ -82,6 +86,33 @@ body {
   margin-top: 20px;
   text-transform: uppercase;
 }
+
+/*RESPONSIVE STYLES*/
+@media screen and (max-width: 1400px) {
+  .rsvp {
+    z-index: 0;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .guest-rsvp-form .short-input {
+    width: 40%;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .guest-rsvp-form .short-input {
+    width: 85%;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .rsvp-guest-type {
+    margin: 0;
+  }
+}
+
+
 
 @-webkit-keyframes face {
   0% { top:0% }
